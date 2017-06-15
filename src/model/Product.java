@@ -1,3 +1,5 @@
+package model;
+
 /**
  * Created by alex on 13.06.17.
  */
@@ -8,6 +10,14 @@ public class Product {
     private int bottomBorderWeight;
     private Formula[] softFormulas;
     private Formula[] hardFormulas;
+
+    public Product(){};
+
+    public Product(Formula[] softFormulas, Formula[] hardFormulas) {
+        this.softFormulas = softFormulas;
+        this.hardFormulas = hardFormulas;
+        this.size = softFormulas.length + hardFormulas.length;
+    }
 
     public int getSize() {
         return size;

@@ -1,3 +1,10 @@
+package model;
+
+import input.*;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+
 /**
  * Created by alex on 13.06.17.
  */
@@ -6,9 +13,13 @@ public class GenAlgorythm {
     private double mutLevel;
     private int populationSize;
     private boolean[][] population;
+    private boolean[] max;
+    private Input input;
     int maxValue;
 
-    public GenAlgorythm(Product product) {
+    public GenAlgorythm(Input input, File file) throws FileNotFoundException {
+        this.input = input;
+        this.product = input.getProduct(file);
 
     }
 
@@ -64,12 +75,25 @@ public class GenAlgorythm {
         return vect;
     }
 
+    int getMax(int[] vect, boolean[][] population) {
+        int max = vect[0];
+        for(int i = 0; i < vect.length; i++) {
+            if(vect[i] > max) {
+                max = vect[i];
+                this.max = population[i];
+            }
+        }
+
+        return max;
+    }
+
     int getMax(int[] vect) {
         int max = vect[0];
         for(int i = 0; i < vect.length; i++) {
             if(vect[i] > max)
                 max = vect[i];
         }
+
         return max;
     }
 
@@ -83,8 +107,9 @@ public class GenAlgorythm {
             fitness[i] = product.getProductWeight(population[i]);
             summ+=fitness[i];
             newPopulation[i] = new boolean[product.getSize()];
+            System.out.println(getMax(fitness));
             if(maxValue < getMax(fitness))
-                maxValue = getMax(fitness);
+                maxValue = getMax(fitness, newPopulation);
         }
         for(int i = 0; i < populationSize; i++)
             prob[i] = fitness[i]/summ;
@@ -122,7 +147,14 @@ public class GenAlgorythm {
         createStartPopulation();
         for(int i = 0; i < iterCount; i++)
             createNextGen();
+        //printMaxValue();
         return maxValue;
+    }
+
+    private void printMaxValue() {
+        for(int i = 0; i < max.length; i++) {
+            System.out.println(max[i] + " ");
+        }
     }
 
 }
