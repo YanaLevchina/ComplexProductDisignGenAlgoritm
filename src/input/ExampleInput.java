@@ -16,7 +16,6 @@ public class ExampleInput implements Input{
     @Override
     public Product getProduct(File file) throws FileNotFoundException {
         Scanner scan = new Scanner(new FileInputStream(file));
-        Product product = new Product();
         String line;
         String[] fileLine;
         String[] brackets;
@@ -25,6 +24,8 @@ public class ExampleInput implements Input{
         Bracket[] formula = new Bracket[scan.nextInt()];
         Formula[] softFormulas = new Formula[scan.nextInt()];
         Formula[] hardFormulas = new Formula[formula.length - softFormulas.length];
+        int[] weights = new int[formula.length];
+        Product product = new Product(formula.length);
         int hard;
         int hardNum = 0;
         int softNum = 0;
@@ -34,7 +35,7 @@ public class ExampleInput implements Input{
             line=scan.nextLine();
             fileLine = line.split(" ");
             hard = Integer.valueOf(fileLine[0]);
-
+            weights[hardNum + softNum] = hard;
             brackets = fileLine[1].split(";");
             for(int i = 0; i < brackets.length; i++) {
                 variablesInFile = brackets[i].split(",");
@@ -52,7 +53,7 @@ public class ExampleInput implements Input{
                 softNum++;
             }
         }
-        product = new Product(softFormulas, hardFormulas);
+        product = new Product(softFormulas, hardFormulas, weights);
         return product;
     }
 }

@@ -13,12 +13,20 @@ public class Product {
 
     public Product(){};
 
-    public Product(Formula[] softFormulas, Formula[] hardFormulas) {
+    public Product(int length){
+        partWeights = new int[length];
+    };
+
+    public Product(Formula[] softFormulas, Formula[] hardFormulas, int[] weights) {
         this.softFormulas = softFormulas;
         this.hardFormulas = hardFormulas;
+        this.partWeights = weights;
         this.size = softFormulas.length + hardFormulas.length;
     }
 
+    public void setPart(int i, int value) {
+        partWeights[i] = value;
+    }
     public int getSize() {
         return size;
     }
