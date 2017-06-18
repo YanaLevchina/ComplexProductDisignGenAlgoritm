@@ -17,11 +17,11 @@ public class GenAlgorythm {
     private Input input;
     int maxValue;
 
-    public GenAlgorythm(int populationSize, Input input, File file) throws FileNotFoundException {
+    public GenAlgorythm(double mutLevel, int populationSize, Input input, File file) throws FileNotFoundException {
         this.input = input;
         this.product = input.getProduct(file);
         this.populationSize = populationSize;
-
+        this.mutLevel = mutLevel;
     }
 
     private boolean[][] createStartPopulation() {
@@ -50,6 +50,7 @@ public class GenAlgorythm {
                     result = i;
             }
         }
+        System.out.println("first for crossover is " + result);
         return result;
     }
 
@@ -65,24 +66,40 @@ public class GenAlgorythm {
                 }
             }
         }
+        System.out.println("second for crossover is " + result);
         return result;
     }
 
     private boolean[] createNextGenIndividual(double[] prob) {
-        boolean[] vect = new boolean[prob.length];
+        boolean[] vect = new boolean[population[0].length];
         do {
-            vect = mutation(crossOver(population[getFirstForCrossOver(prob)], population[getSecondForCrossOver(prob, getFirstForCrossOver(prob))]));
+            int first = getFirstForCrossOver(prob);
+            int second = getSecondForCrossOver(prob, first);
+            vect = mutation(crossOver(population[first], population[second]));
         } while (!product.isFeasible(vect));
         System.out.println("Vector created");
+        for(int i = 0; i < vect.length; i++)
+            System.out.print(vect[i] + " ");
+        System.out.println();
         return vect;
     }
 
+    private void copyArr(boolean[] vect1, boolean[] vect2) {
+        for(int i = 0; i < vect2.length; i++)
+            vect1[i] = vect2[i];
+    }
+
     int getMax(int[] vect, boolean[][] population) {
-        int max = vect[0];
+        int max = -1;
         for(int i = 0; i < vect.length; i++) {
             if(vect[i] > max) {
                 max = vect[i];
-                this.max = population[i];
+                this.max = new boolean[population[i].length];
+                copyArr(this.max, population[i]);
+                System.out.println("New maximum is:");
+                for(int j = 0; j < this.max.length; j++)
+                    System.out.print(this.max[j] + " ");
+                System.out.println();
             }
         }
 
@@ -111,10 +128,11 @@ public class GenAlgorythm {
             newPopulation[i] = new boolean[product.getSize()];
             System.out.println(getMax(fitness));
             if(maxValue < getMax(fitness))
-                maxValue = getMax(fitness, newPopulation);
+                maxValue = getMax(fitness, population);
         }
+        System.out.println("current max is " + maxValue);
         for(int i = 0; i < populationSize; i++)
-            prob[i] = fitness[i]/summ;
+            prob[i] = (double) fitness[i]/summ;
 
 
         for(int i = 0; i < populationSize; i++) {
@@ -130,6 +148,8 @@ public class GenAlgorythm {
         for(int i =0; i < vect.length; i++) {
             if(Math.random() < mutLevel)
                 newVect[i] = !vect[i];
+            else
+                newVect[i] = vect[i];
         }
         return newVect;
     }
@@ -155,7 +175,7 @@ public class GenAlgorythm {
 
     private void printMaxValue() {
         for(int i = 0; i < max.length; i++) {
-            System.out.println(max[i] + " ");
+            System.out.print(max[i] + " ");
         }
     }
 
