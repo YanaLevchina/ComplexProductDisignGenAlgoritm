@@ -21,11 +21,13 @@ public class ExampleInput implements Input{
         String[] brackets;
         String[] variablesInFile;
         int[] variables;
-        Bracket[] formula = new Bracket[scan.nextInt()];
-        Formula[] softFormulas = new Formula[scan.nextInt()];
-        Formula[] hardFormulas = new Formula[formula.length - softFormulas.length];
-        int[] weights = new int[formula.length];
-        Product product = new Product(formula.length);
+        int size = scan.nextInt();
+        int numFormulas = scan.nextInt();
+
+        Formula[] hardFormulas = new Formula[scan.nextInt()];
+        Formula[] softFormulas = new Formula[numFormulas - hardFormulas.length];
+        int[] weights = new int[numFormulas];
+        Product product = new Product(numFormulas);
         int hard;
         int hardNum = 0;
         int softNum = 0;
@@ -37,7 +39,9 @@ public class ExampleInput implements Input{
             hard = Integer.valueOf(fileLine[0]);
             weights[hardNum + softNum] = hard;
             brackets = fileLine[1].split(";");
+            Bracket[] formula = new Bracket[brackets.length];
             for(int i = 0; i < brackets.length; i++) {
+
                 variablesInFile = brackets[i].split(",");
                 variables = new int[variablesInFile.length];
                 for(int j = 0; j < variablesInFile.length; j++)
@@ -45,15 +49,15 @@ public class ExampleInput implements Input{
                 formula[i] = new Bracket(variables);
             }
             if(hard > 0) {
-                hardFormulas[hardNum] = new Formula(formula, hard);
-                hardNum++;
-            }
-            else {
                 softFormulas[softNum] = new Formula(formula, hard);
                 softNum++;
             }
+            else {
+                hardFormulas[hardNum] = new Formula(formula, hard);
+                hardNum++;
+            }
         }
-        product = new Product(softFormulas, hardFormulas, weights);
+        product = new Product(size, softFormulas, hardFormulas, weights);
         return product;
     }
 }

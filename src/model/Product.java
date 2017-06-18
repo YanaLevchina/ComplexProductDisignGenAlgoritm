@@ -17,11 +17,11 @@ public class Product {
         partWeights = new int[length];
     };
 
-    public Product(Formula[] softFormulas, Formula[] hardFormulas, int[] weights) {
+    public Product(int size, Formula[] softFormulas, Formula[] hardFormulas, int[] weights) {
         this.softFormulas = softFormulas;
         this.hardFormulas = hardFormulas;
         this.partWeights = weights;
-        this.size = softFormulas.length + hardFormulas.length;
+        this.size = size;
     }
 
     public void setPart(int i, int value) {

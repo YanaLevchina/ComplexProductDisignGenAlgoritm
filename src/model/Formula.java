@@ -1,6 +1,7 @@
 package model;
 
 /**
+ *
  * Created by alex on 13.06.17.
  */
 public class Formula {
@@ -9,7 +10,14 @@ public class Formula {
 
     public Formula(Bracket[] formula, int hard) {
         this.weight = hard;
-        this.brackets = formula;
+        this.brackets = copy(formula);
+    }
+
+    private Bracket[] copy(Bracket[] formula) {
+        Bracket[] brackets = new Bracket[formula.length];
+        for(int i = 0; i < brackets.length; i++)
+            brackets[i] = formula[i].getCopy();
+        return brackets;
     }
 
     public boolean isExecuted(boolean[] partsInProduct) {
