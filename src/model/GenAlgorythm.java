@@ -17,9 +17,10 @@ public class GenAlgorythm {
     private Input input;
     int maxValue;
 
-    public GenAlgorythm(Input input, File file) throws FileNotFoundException {
+    public GenAlgorythm(int populationSize, Input input, File file) throws FileNotFoundException {
         this.input = input;
         this.product = input.getProduct(file);
+        this.populationSize = populationSize;
 
     }
 
@@ -72,6 +73,7 @@ public class GenAlgorythm {
         do {
             vect = mutation(crossOver(population[getFirstForCrossOver(prob)], population[getSecondForCrossOver(prob, getFirstForCrossOver(prob))]));
         } while (!product.isFeasible(vect));
+        System.out.println("Vector created");
         return vect;
     }
 
@@ -147,7 +149,7 @@ public class GenAlgorythm {
         createStartPopulation();
         for(int i = 0; i < iterCount; i++)
             createNextGen();
-        //printMaxValue();
+        printMaxValue();
         return maxValue;
     }
 
